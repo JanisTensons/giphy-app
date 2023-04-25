@@ -6,7 +6,6 @@ require_once 'vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
-
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +20,7 @@ $dotenv->load();
 <form action="" method="POST">
     Search: <input type="text" name="search"><br><br>
     Limit: <input type="text" name="limit"><br><br>
-    <input type="Submit"><br><br>
+    <input type="Submit" value="Search GIFs"><br><br>
 </form>
 
 <?php
