@@ -8,8 +8,8 @@
 <header>GIPHY APP</header>
 <br>
 <form action="" method="POST">
-    Search: <input type="text" name="search"><br><br>
-    Limit: <input type="text" name="limit"><br><br>
+    Search: <label><input type="text" name="search"></label><br><br>
+    Limit:  <label><input type="number" min="1" name="limit"></label><br><br>
     <input type="Submit" value="Search GIFs"><br><br>
 </form>
 </body>

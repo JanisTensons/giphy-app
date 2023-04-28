@@ -1,19 +1,55 @@
 <?php declare(strict_types=1);
 
-use App\GiphyApiClient;
+use App\Models\GiphyApiClient;
+use App\Models\Gif;
+use App\Controllers\GifsController;
 
 require_once 'vendor/autoload.php';
+require 'app/Views/index.view.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-require 'app/Views/view.php';
+$dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
+    $r->addRoute('GET', '/coding-gifs', 'App\Controllers\GifsController@getSearchedGifs');
+    $r->addRoute('GET', '/trending', 'App\Controllers\GifsController@getTrendingGifs');
+});
 
+// Fetch method and URI from somewhere
+$httpMethod = $_SERVER['REQUEST_METHOD'];
+$uri = $_SERVER['REQUEST_URI'];
+
+// Strip query string (?foo=bar) and decode URI
+if (false !== $pos = strpos($uri, '?')) {
+    $uri = substr($uri, 0, $pos);
+}
+$uri = rawurldecode($uri);
+
+$routeInfo = $dispatcher->dispatch($httpMethod, $uri);
+switch ($routeInfo[0]) {
+    case FastRoute\Dispatcher::NOT_FOUND:
+        // ... 404 Not Found
+        break;
+    case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+        $allowedMethods = $routeInfo[1];
+        // ... 405 Method Not Allowed
+        break;
+    case FastRoute\Dispatcher::FOUND:
+        $handler = $routeInfo[1];
+        $vars = $routeInfo[2];
+
+        [$controllerName, $methodName] = explode('@', $handler);
+        $controller = new $controllerName;
+        $response = $controller->{$methodName}();
+        break;
+}
+$giphyList = new \App\Models\GifsList();
 $apiClient = new GiphyApiClient();
+
 if (isset($_POST["search"])) {
-    $gifsList = $apiClient->getGiphyContents($_POST["search"], $_POST["limit"]);
-    foreach ($gifsList as $gif) {
-        $gifUrl = $gif->images->downsized_medium->url;
-        echo " <img src=' $gifUrl' alt='gif'>";
+    $gifsList = $apiClient->getSearchContents($_POST["search"], $_POST["limit"]);
+    /** @var Gif $gif */
+    foreach ($gifsList->getList() as $gif) {
+        echo " <img src=' {$gif->getUrl()}' alt='{$gif->getTitle()}'>";
     }
 }

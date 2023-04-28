@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coding-gifs</title>
+</head>
+<body>
+<header>Enjoy your GIFs</header>
+<br>
+{% for gif in gifs %}
+<img src="{{ gif.getUrl() }}" alt="{{ gif.getTitle() }}">
+{% endfor %}
+</body>
+</html>
