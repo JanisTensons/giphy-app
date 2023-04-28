@@ -40,7 +40,7 @@ class GiphyApiClient
     {
         $parameters = [
             'api_key' => $_ENV['API_KEY'],
-            'limit' => 8,
+            'limit' => 12,
             'offset' => rand(1, 100)
         ];
         $queryString = http_build_query($parameters);

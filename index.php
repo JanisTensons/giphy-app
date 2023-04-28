@@ -11,7 +11,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/coding-gifs', 'App\Controllers\GifsController@getSearchedGifs');
+    $r->addRoute('POST', '/search', 'App\Controllers\GifsController@getSearchedGifs');
     $r->addRoute('GET', '/trending', 'App\Controllers\GifsController@getTrendingGifs');
 });
 
@@ -42,14 +42,4 @@ switch ($routeInfo[0]) {
         $controller = new $controllerName;
         $response = $controller->{$methodName}();
         break;
-}
-$giphyList = new \App\Models\GifsList();
-$apiClient = new GiphyApiClient();
-
-if (isset($_POST["search"])) {
-    $gifsList = $apiClient->getSearchContents($_POST["search"], $_POST["limit"]);
-    /** @var Gif $gif */
-    foreach ($gifsList->getList() as $gif) {
-        echo " <img src=' {$gif->getUrl()}' alt='{$gif->getTitle()}'>";
-    }
 }

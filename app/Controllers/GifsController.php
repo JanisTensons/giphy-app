@@ -11,7 +11,7 @@ class GifsController
         $loader = new \Twig\Loader\FilesystemLoader('app/Views');
         $twig = new \Twig\Environment($loader);
         $apiClient = new GiphyApiClient();
-        $gifsList = $apiClient->getSearchContents('coding', '8');
+        $gifsList = $apiClient->getSearchContents("{$_POST["search"]}", "{$_POST["limit"]}");
         echo $twig->render('gifs.view.twig', ['gifs' => $gifsList->getList()]);
     }
 

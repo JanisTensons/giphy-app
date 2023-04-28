@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coding-gifs</title>
+    <link rel="stylesheet" href="app/Views/styles.css"/>
 </head>
 <body>
-<header>Enjoy your GIFs</header>
-<br>
-{% for gif in gifs %}
-<img src="{{ gif.getUrl() }}" alt="{{ gif.getTitle() }}">
-{% endfor %}
+<h2>Enjoy your GIFs</h2>
+<br><br>
+<div class="center">
+    {% for gif in gifs %}
+        <img src="{{ gif.getUrl() }}" alt="{{ gif.getTitle() }}">
+    {% endfor %}
+</div>
 </body>
 </html>
