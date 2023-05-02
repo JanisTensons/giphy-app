@@ -2,25 +2,22 @@
 
 namespace App\Controllers;
 
-use App\Models\GiphyApiClient;
+use App\Models\GifApiClient;
+use App\View;
 
 class GifsController
 {
-    public function getSearchedGifs()
+    public function getSearchedGifs(): View
     {
-        $loader = new \Twig\Loader\FilesystemLoader('app/Views');
-        $twig = new \Twig\Environment($loader);
-        $apiClient = new GiphyApiClient();
+        $apiClient = new GifApiClient();
         $gifsList = $apiClient->getSearchContents("{$_POST["search"]}", "{$_POST["limit"]}");
-        echo $twig->render('gifs.view.twig', ['gifs' => $gifsList->getList()]);
+        return new View('gifs', ['gifs' => $gifsList->getGifsCollection()]);
     }
 
-    public function getTrendingGifs()
+    public function getTrendingGifs(): View
     {
-        $loader = new \Twig\Loader\FilesystemLoader('app/Views');
-        $twig = new \Twig\Environment($loader);
-        $apiClient = new GiphyApiClient();
+        $apiClient = new GifApiClient();
         $gifsList = $apiClient->getTrendingContents();
-        echo $twig->render('gifs.view.twig', ['gifs' => $gifsList->getList()]);
+        return new View('gifs', ['gifs' => $gifsList->getGifsCollection()]);
     }
 }

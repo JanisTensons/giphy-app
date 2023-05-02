@@ -4,18 +4,18 @@ namespace App\Models;
 
 use GuzzleHttp\Client;
 
-class GiphyApiClient
+class GifApiClient
 {
     private Client $client;
-    private GifsList $gifsList;
+    private GifsCollection $gifsList;
 
     public function __construct()
     {
         $this->client = new Client();
-        $this->gifsList = new GifsList();
+        $this->gifsList = new GifsCollection();
     }
 
-    public function getSearchContents($search, $limit): GifsList
+    public function getSearchContents($search, $limit): GifsCollection
     {
         $parameters = [
             'api_key' => $_ENV['API_KEY'],
@@ -36,7 +36,7 @@ class GiphyApiClient
         return $this->gifsList;
     }
 
-    public function getTrendingContents(): GifsList
+    public function getTrendingContents(): GifsCollection
     {
         $parameters = [
             'api_key' => $_ENV['API_KEY'],

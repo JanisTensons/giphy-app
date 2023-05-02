@@ -1,14 +1,18 @@
 <?php declare(strict_types=1);
 
-use App\Models\GiphyApiClient;
+use App\Models\GifApiClient;
 use App\Models\Gif;
 use App\Controllers\GifsController;
+use App\View;
 
 require_once 'vendor/autoload.php';
 require 'app/Views/index.view.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
+
+$loader = new \Twig\Loader\FilesystemLoader('app/Views');
+$twig = new \Twig\Environment($loader);
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->addRoute('POST', '/search', 'App\Controllers\GifsController@getSearchedGifs');
@@ -40,6 +44,8 @@ switch ($routeInfo[0]) {
 
         [$controllerName, $methodName] = explode('@', $handler);
         $controller = new $controllerName;
+        /** @var View $response */
         $response = $controller->{$methodName}();
+        echo $twig->render($response->getTemplate() . '.view.twig', $response->getGifsList());
         break;
 }
